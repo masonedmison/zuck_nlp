@@ -15,11 +15,11 @@ def tokenize_text(text):
 def remove_characters_before_tokenization(sentence, keep_apostrophes = False):
     sentence = sentence.strip()
     if keep_apostrophes:
-        PATTERN = r'[?|$|&|*|%|@||(|)|~]' # add any characters to remove
-        filtered_sentence = re.sub(PATTERN, r'',sentence)
+        pattern = r'[?|$|&|*|%|@||(|)|~]' # add any characters to remove
+        filtered_sentence = re.sub(pattern, r'',sentence)
     else:
-        PATTERN = r'[^a-zA-Z0-9]' #only extract alpha numeric characters
-        filtered_sentence = re.sub(PATTERN, r'', sentence)
+        pattern = r'[^a-zA-Z0-9]' #only extract alpha numeric characters
+        filtered_sentence = re.sub(pattern, r'', sentence)
     return filtered_sentence
 
 
