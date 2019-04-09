@@ -25,7 +25,7 @@ def getfiles():
 def parse_xml_IP(file):
     """ parses xml files searching for each participant tag, keywords returned from preprocessing are appended
     as participant attributes
-    keyword argument:
+    :argument
     xml file
     """
 
