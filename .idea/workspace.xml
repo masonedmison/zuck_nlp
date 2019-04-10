@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b4e85f27-73a3-440f-b029-56553cb5faf0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +16,8 @@
       <file leaf-file-name="preprocess.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="50" column="28" lean-forward="true" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
+            <state relative-caret-position="285">
+              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -177,12 +176,25 @@
       <option name="project" value="LOCAL" />
       <updated>1554850112349</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="More preprocessing&#10;&#10;expand_contractions(sent, contraction_map)">
+      <created>1554916460069</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1554916460069</updated>
+    </task>
+    <task id="LOCAL-00003" summary="More preprocessing&#10;&#10;remove_repeated_characters">
+      <created>1554917793992</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554917793992</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="777" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -208,7 +220,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="contractions borrowed from Sarkar text analytics source code" />
-    <option name="LAST_COMMIT_MESSAGE" value="contractions borrowed from Sarkar text analytics source code" />
+    <MESSAGE value="More preprocessing&#10;&#10;expand_contractions(sent, contraction_map)" />
+    <MESSAGE value="More preprocessing&#10;&#10;remove_repeated_characters" />
+    <option name="LAST_COMMIT_MESSAGE" value="More preprocessing&#10;&#10;remove_repeated_characters" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/preprocess.py">
@@ -249,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="50" column="28" lean-forward="true" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
+        <state relative-caret-position="285">
+          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
