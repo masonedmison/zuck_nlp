@@ -11,7 +11,7 @@ def tokens(text):
     return re.findall('[a-z]+', text.lower())
 
 WORDS = tokens(open('big.txt').read())
-WORD_COUNTS = collections.counter(WORDS)
+WORD_COUNTS = collections.Counter(WORDS)
 
 
 def edits0(word):
@@ -58,6 +58,7 @@ def edits2(word):
     """
     return {e2 for e1 in edits1(word) for e2 in edits1(e1)}
 
+
 def known(words):
     """
     return the subset of words that are actually in WORD_COUNTS dictionary
@@ -65,3 +66,15 @@ def known(words):
     :return:
     """
     return {w for w in words if w in WORD_COUNTS}
+
+
+def correct(word):
+    """ get the best spelling for the input word
+    :param word:
+    :return:
+    """
+    canidates = (known(edits0(word)) or
+                 known(edits1(word)) or
+                 known(edits2(word)) or
+                 [word])
+    return max(canidates, key=WORD_COUNTS.get)
