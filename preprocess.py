@@ -1,4 +1,5 @@
 import nltk
+from nltk.corpus import wordnet
 import re
 import string
 from contractions import CONTRACTION_MAP
@@ -49,6 +50,23 @@ def expand_contractions(sentence, contraction_mapping):
         return expanded_contraction
     expanded_sentence = contractions_pattern.sub(expand_match, sentence)
     return expanded_sentence
+
+
+def remove_stopwords(tokens):
+    stopwords = nltk.corpus.stopwords.words('english')
+    filtered_tokens = [token for token in tokens if token not in stopwords]
+    return filtered_tokens
+
+
+def remove_repeated_characters(tokens):
+    repeat_pattern = re.compile(r'(\w*)(\w)\2(\w*)')
+    match_substitution = r'\1\2\3'
+
+    def replace(old_word):
+        if wordnet.synsets(old_word):
+            return old_word
+        correct_tokens = [replace(word) for word in tokens]
+        return correct_tokens
 
 
 if __name__ == '__main__':
