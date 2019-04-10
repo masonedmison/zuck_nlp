@@ -10,6 +10,9 @@ def tokens(text):
     """
     return re.findall('[a-z]+', text.lower())
 
+WORDS = tokens(open('big.txt').read())
+WORD_COUNTS = collections.counter(WORDS)
+
 
 def edits0(word):
     """
@@ -54,3 +57,11 @@ def edits2(word):
     :return:
     """
     return {e2 for e1 in edits1(word) for e2 in edits1(e1)}
+
+def known(words):
+    """
+    return the subset of words that are actually in WORD_COUNTS dictionary
+    :param words:
+    :return:
+    """
+    return {w for w in words if w in WORD_COUNTS}
