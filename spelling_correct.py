@@ -68,6 +68,7 @@ def known(words):
     return {w for w in words if w in WORD_COUNTS}
 
 
+# inferior method as it does not account for varying case
 def correct(word):
     """ get the best spelling for the input word
     :param word:
@@ -78,3 +79,37 @@ def correct(word):
                  known(edits2(word)) or
                  [word])
     return max(canidates, key=WORD_COUNTS.get)
+
+
+def correct_match(match):
+    word = match.group()
+
+    def case_of(text):
+        """
+        return case function appropriate:
+        upper, lower, title, or just str
+        :param text:
+        :return:
+        """
+        return(str.upper if text.isupper() else
+               str.lower if text.islower() else
+               str.title if text.istitle() else
+               str)
+    return case_of(word(correct(word.lower())))
+
+
+def correct_text_generic(text):
+    """
+    correct all the words within a text,
+    returning the corrected text
+    :param text:
+    :return:
+    """
+    return re.sub('[a-zA-Z]+', correct_match, text)
+
+# regarding spelling also consider PyEnchant and aspell - python
+
+# the same algorithm as seen above (correct) is implemented in pattern as from pattern.en import suggest
+# ----> suggest(word)
+
+#
