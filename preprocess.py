@@ -6,12 +6,11 @@ import string
 from contractions import CONTRACTION_MAP
 import pickle
 
-# for testing purposes
+# file for testing purposes
 #file = '/Users/MasonBaran/Desktop/xml_read_test/2019-006.xml'
-# load in stopwords from nltk
 
 
-# short test corpus
+# short corpus for testing
 corpus = ["The brown fox wasn't that quick and he couldn't win the race \
           Hey that's a great deal! I just bought a phone for $199\
           @@You'll (learn) a **lot** in the book. Python is an amazing language!@@",
@@ -23,6 +22,7 @@ def tokenize_text(text):
     tokens = nltk.word_tokenize(text)
     tokens = [token.strip() for token in tokens]
     return tokens
+
 
 def remove_characters_before_tokenization(text, keep_apostrophes = False):
     text = text.strip()

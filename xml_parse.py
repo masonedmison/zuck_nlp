@@ -68,8 +68,6 @@ if __name__ == "__main__":
     # for file in files:
     #     parse_xml_IP(file)
 
-
-
     # Testing on single file to send to preprocess
     file = '2019-006.xml'
 
@@ -78,4 +76,3 @@ if __name__ == "__main__":
 
     # parse xml for full participant contents
     parse_xml_FF(file)
-  
