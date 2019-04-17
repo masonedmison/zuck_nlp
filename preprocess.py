@@ -12,55 +12,59 @@ import pickle
 
 
 # short test corpus
-corpus = "The brown fox wasn't that quick and he couldn't win the race \
+corpus = ["The brown fox wasn't that quick and he couldn't win the race \
           Hey that's a great deal! I just bought a phone for $199\
-          @@You'll (learn) a **lot** in the book. Python is an amazing language!@@"
+          @@You'll (learn) a **lot** in the book. Python is an amazing language!@@",
+            "Hi my names is johnny guamy, I like eggs.... so much it makes me an eggspert, Please. Thank you?",
+          "I ran run runned as fast I couldn't. The boy swear swore sworn too"]
 
 
 def tokenize_text(text):
-    sentences = nltk.sent_tokenize(text)
-    word_tokens = [nltk.word_tokenize(sentence).strip() for sentence in sentences]
-    return word_tokens
+    tokens = nltk.word_tokenize(text)
+    tokens = [token.strip() for token in tokens]
+    return tokens
 
-
-def remove_characters_before_tokenization(sentence, keep_apostrophes = False):
-    sentence = sentence.strip()
+def remove_characters_before_tokenization(text, keep_apostrophes = False):
+    text = text.strip()
     if keep_apostrophes:
         pattern = r'[?|$|&|*|%|@||(|)|~]' # add any characters to remove
-        filtered_sentence = re.sub(pattern, r'',sentence)
+        filtered_sentence = re.sub(pattern, r'', text)
     else:
         pattern = r'[^a-zA-Z0-9]' #only extract alpha numeric characters
-        filtered_sentence = re.sub(pattern, r'', sentence)
+        filtered_sentence = re.sub(pattern, r' ', text)
     return filtered_sentence
 
 
 def remove_characters_after_tokenization(tokens):
     pattern = re.compile('[{}]'.format(re.escape(string.punctuation)))
-    filtered_tokens = filter(None,[pattern.sub('', token) for token in tokens])
+    filtered_tokens = filter(None, [pattern.sub('', token) for token in tokens])
     return filtered_tokens
 
 
 def expand_contractions(text, contraction_mapping):
     contractions_pattern = re.compile('({})'.format('|'.join(contraction_mapping.keys())),
-                                      flags=re.DOTALL|re.IGNORECASE)
+                                      flags=re.IGNORECASE | re.DOTALL)
 
     def expand_match(contraction):
         match = contraction.group(0)
         first_char = match[0]
-        expanded_contraction = contraction_mapping.get(match)\
-            if contraction_mapping.get(match)\
+        expanded_contraction = contraction_mapping.get(match) \
+            if contraction_mapping.get(match) \
             else contraction_mapping.get(match.lower())
         expanded_contraction = first_char + expanded_contraction[1:]
         return expanded_contraction
+
     expanded_text = contractions_pattern.sub(expand_match, text)
-    expanded_text = re.sub("'","", expanded_text)
+    expanded_text = re.sub("'", "", expanded_text)
     return expanded_text
 
 
-def remove_stopwords(tokens):
+def remove_stopwords(text):
+    tokens = tokenize_text(text)
     stopwords = nltk.corpus.stopwords.words('english')
     filtered_tokens = [token for token in tokens if token not in stopwords]
-    return filtered_tokens
+    filtered_text = " ".join(filtered_tokens)
+    return filtered_text
 
 
 def remove_repeated_characters(tokens):
@@ -92,27 +96,32 @@ def get_tagger():
     return classifier
 
 
-def tag_tokens(tokens):
+def pos_tag_text(text):
+
+    def penn_to_wn_tags(pos_tag):
+        if pos_tag.startswith('J'):
+            return wn.ADJ
+        elif pos_tag.startswith('V'):
+            return wn.VERB
+        elif pos_tag.startswith('N'):
+            return wn.NOUN
+        elif pos_tag.startswith('R'):
+            return wn.ADV
+        else:
+            return None
     tagger = get_tagger()
-    return tagger.tag(tokens)
+    tagged_text = tagger.tag(text)
+    tagged_lower_text = [(word.lower(), penn_to_wn_tags(pos_tag))
+                         for word, pos_tag in
+                         tagged_text]
+    return tagged_lower_text
 
-
-def penn_to_wn_tags(pos_tag):
-    if pos_tag.startswith('J'):
-        return wn.ADJ
-    elif pos_tag.startswith('V'):
-        return wn.VERB
-    elif pos_tag.startswith('N'):
-        return wn.NOUN
-    elif pos_tag.startswith('R'):
-        return wn.ADV
-    else:
-        return None
 
 def lemmatize(text):
     wnl = WordNetLemmatizer()
-    pos_tagged_text = tag_tokens(text)
-    lemmatized_tokens = [wnl.lemmatize(word,pos_tag) if pos_tag else word for word, pos_tag in pos_tagged_text]
+    tokens = nltk.word_tokenize(text)
+    pos_tagged_text = pos_tag_text(tokens)
+    lemmatized_tokens = [wnl.lemmatize(word, pos_tag) if pos_tag else word for word, pos_tag in pos_tagged_text]
     lemmatized_text = " ".join(lemmatized_tokens)
     return lemmatized_text
 
@@ -122,9 +131,12 @@ def normalize_corpus(corpus, tokenize=False):
     for text in corpus:
         text = expand_contractions(text, CONTRACTION_MAP)
         text = lemmatize(text)
+        # all good
+        text = remove_characters_before_tokenization(text)
+        text = remove_stopwords(text)
+        if tokenize:
+            text = tokenize_text(text)
         normalized_corpus.append(text)
-    #for testing
-    print(normalized_corpus)
 
 
 if __name__ == '__main__':

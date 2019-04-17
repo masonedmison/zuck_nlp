@@ -23,7 +23,6 @@ test_data = data[3500:]
 
 
 nbt = ClassifierBasedPOSTagger(train=train_data, classifier_builder=NaiveBayesClassifier.train)
-nbt.
 save_classifier = open('ClassifierBasedPOSTagger.pickle', 'wb')
 pickle.dump(nbt, save_classifier)
 save_classifier.close()
