@@ -139,6 +139,7 @@ def normalize_corpus(corpus, tokenize=False):
         normalized_corpus.append(text)
 
 
+
 if __name__ == '__main__':
     normalize_corpus(corpus)
 
