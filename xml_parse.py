@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 import glob
-from bs4 import BeautifulSoup
-from preprocess import preprocess
+from preprocess import normalize_corpus
 import os
 
 '''
@@ -13,12 +12,12 @@ tasks:
 
 
 def set_directory():
-    os.chdir('/Users/MasonBaran/Desktop/xml_read_test')
+    os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
 
 
-def getfiles():
-    for filenames in glob.iglob('*.xml'):
-        yield filenames
+def get_files():
+    for file_names in glob.iglob('*.xml'):
+        yield file_names
 
 
 # parse xml at participant level
@@ -38,18 +37,19 @@ def parse_xml_IP(file):
 
     for child in root.iter():
         if child.tag == 'participant':
-            preprocess(child.text)
+            normalize_corpus(child.text)
             
             # append keywords as attribute using child.set for each attribute
             # child.set("test", ["ing", "ing2"])
             # print(child.attrib)
 
 
-def parse_xml_FF(file):
-    """ parses xml files and joins all participant utterances into single string
-    The resultinh string is sent to preprocessing
+def parse_xml_ff(file):
+    """ ff = full file -- parses xml files and joins all participant utterances into single string
+    The resulting string is sent to preprocessing
     :argument xml file
     """
+    # TODO replace all items in square brackets with "" - [] indicates non-spoken elements
     if file.split('.')[1] != "xml":
         raise TypeError("{} is not an .xml file".format(file))
     
@@ -58,21 +58,19 @@ def parse_xml_FF(file):
 
     contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
     # join with space between participant utterances
-    contents_join = " ".join(contents_whole)
-    preprocess(contents_join)
+    contents_joined = " ".join(contents_whole)
+    normalize_corpus(contents_joined)
 
 
 if __name__ == "__main__":
     set_directory()
-    # files = getfiles()
+    files = get_files()
     # for file in files:
     #     parse_xml_IP(file)
 
-    # Testing on single file to send to preprocess
-    file = '2019-006.xml'
-
     # parse xml for individual participant
-    parse_xml_IP(file)
+    # parse_xml_IP(file)
 
     # parse xml for full participant contents
-    parse_xml_FF(file)
+    for file in files:
+        parse_xml_ff(file)
