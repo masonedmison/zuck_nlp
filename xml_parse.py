@@ -1,17 +1,12 @@
 import xml.etree.ElementTree as ET
 import glob
-from preprocess import normalize_corpus
 import os
-from utils import build_feature_matrix
+import pandas as pd
 
-'''
-pratice run
-tasks:
-    read in xml file(s)
-    ?
-'''
 
 CORPUS = []
+TITLES = []
+R_IDS = []
 
 
 def set_directory():
@@ -27,28 +22,24 @@ def get_files():
 
 
 # parse xml at participant level
-def parse_xml_IP(file):
-    """ parses xml files searching for each participant tag, keywords returned from preprocessing are appended
-    as participant attributes
-    :argument
-    xml file
-    """
-
-    if file.split('.')[1] != "xml":
-        raise TypeError("{} is not an .xml file".format(file))
-    # create tree
-    tree = ET.parse(file)
-    # get base root of tree instance
-    root = tree.getroot()
-
-    for child in root.iter():
-        if child.tag == 'participant':
-            normalize_corpus(child.text)
+# def parse_xml_IP(file):
+#     """ parses xml files searching for each participant tag, keywords returned from preprocessing are appended
+#     as participant attributes
+#     :argument
+#     xml file
+#     """
+#
+#     if file.split('.')[1] != "xml":
+#         raise TypeError("{} is not an .xml file".format(file))
+#     # create tree
+#     tree = ET.parse(file)
+#     # get base root of tree instance
+#     root = tree.getroot()
+#
+#     for child in root.iter():
+#         if child.tag == 'participant':
+#             normalize_corpus(child.text)
             
-            # append keywords as attribute using child.set for each attribute
-            # child.set("test", ["ing", "ing2"])
-            # print(child.attrib)
-
 
 def parse_xml_ff(file):
     """ ff = full file -- parses xml files and joins all participant utterances into single string
@@ -62,31 +53,39 @@ def parse_xml_ff(file):
     tree = ET.parse(file)
     root = tree.getroot()
 
+    # get record title
+    doc_title_find = root.findall("./metadata/title")
+    doc_title = doc_title_find[0].text
+
+    # get record id
+    r_id_find = root.findall("./metadata/record_id")
+    r_id = r_id_find[0].text
+
     contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
     # join with space between participant utterances
     contents_joined = " ".join(contents_whole)
     CORPUS.append(contents_joined)
+    TITLES.append(doc_title)
+    R_IDS.append(r_id)
 
 
-if __name__ == "__main__":
+def make_df():
+    if len(TITLES) != len(CORPUS) or len(TITLES) != len(R_IDS):
+        raise ValueError("title, r_ids, and corpus arrays are not of equal length")
+    # else...
+    ids = pd.Series(R_IDS)
+    titles = pd.Series(TITLES)
+    df = pd.DataFrame({'record_id':ids, 'Title': titles})
+    return df
+
+
+def xml_parse():
     set_directory()
     files = get_files()
-    # for file in files:
-    #     parse_xml_IP(file)
-
-    # parse xml for individual participant
-    # parse_xml_IP(file)
-
-    # parse xml for full participant contents
     for file in files:
         parse_xml_ff(file)
-        print(file)
+    df = make_df()
+    return CORPUS, TITLES, R_IDS, df
 
-    # place holder 'driver' logic
 
-    nc = normalize_corpus(CORPUS)
-    vectorizer, feature_matrix = build_feature_matrix(CORPUS,
-                                                      feature_type='tfidf',
-                                                      min_df=0.24, max_df=0.85,
-                                                      ngram_range=(1,2))
-    print(vectorizer)
+
