@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 import glob
 from preprocess import normalize_corpus
 import os
+from utils import build_feature_matrix
 
 '''
 pratice run
@@ -10,9 +11,14 @@ tasks:
     ?
 '''
 
+CORPUS = []
+
 
 def set_directory():
-    os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
+    # real training set
+    # os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
+    # TESTING
+    os.chdir('/Users/MasonBaran/Desktop/TESTING')
 
 
 def get_files():
@@ -59,7 +65,7 @@ def parse_xml_ff(file):
     contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
     # join with space between participant utterances
     contents_joined = " ".join(contents_whole)
-    normalize_corpus(contents_joined)
+    CORPUS.append(contents_joined)
 
 
 if __name__ == "__main__":
@@ -74,3 +80,13 @@ if __name__ == "__main__":
     # parse xml for full participant contents
     for file in files:
         parse_xml_ff(file)
+        print(file)
+
+    # place holder 'driver' logic
+
+    nc = normalize_corpus(CORPUS)
+    vectorizer, feature_matrix = build_feature_matrix(CORPUS,
+                                                      feature_type='tfidf',
+                                                      min_df=0.24, max_df=0.85,
+                                                      ngram_range=(1,2))
+    print(vectorizer)

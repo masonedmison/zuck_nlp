@@ -90,13 +90,12 @@ def get_tagger():
     opens pickle file and returns trained classifier object
     :return: classifier
     """
-    classifier_f = open('ClassifierBasedPOSTagger.pickle', 'rb')
-    classifier = pickle.load(classifier_f)
-    classifier_f.close()
+    cf = open('/Users/MasonBaran/zuck_nlp/ClassifierBasedPOSTagger.pickle', 'rb')
+    classifier = pickle.load(cf)
     return classifier
 
 
-def pos_tag_text(text):
+def pos_tag_text(text, tagger):
 
     def penn_to_wn_tags(pos_tag):
         if pos_tag.startswith('J'):
@@ -109,7 +108,7 @@ def pos_tag_text(text):
             return wn.ADV
         else:
             return None
-    tagger = get_tagger()
+    # tagger = get_tagger()
     tagged_text = tagger.tag(text)
     tagged_lower_text = [(word.lower(), penn_to_wn_tags(pos_tag))
                          for word, pos_tag in
@@ -117,31 +116,30 @@ def pos_tag_text(text):
     return tagged_lower_text
 
 
-def lemmatize(text):
+def lemmatize_text(text, tagger):
     wnl = WordNetLemmatizer()
     tokens = nltk.word_tokenize(text)
-    pos_tagged_text = pos_tag_text(tokens)
+    pos_tagged_text = pos_tag_text(tokens, tagger)
     lemmatized_tokens = [wnl.lemmatize(word, pos_tag) if pos_tag else word for word, pos_tag in pos_tagged_text]
     lemmatized_text = " ".join(lemmatized_tokens)
     return lemmatized_text
 
 
 def normalize_corpus(corpus, tokenize=False):
+    nbt_classifier = get_tagger()
     normalized_corpus = []
     for text in corpus:
         text = expand_contractions(text, CONTRACTION_MAP)
-        text = lemmatize(text)
+        text = lemmatize_text(text, nbt_classifier)
         # all good
         text = remove_characters_before_tokenization(text)
         text = remove_stopwords(text)
         if tokenize:
             text = tokenize_text(text)
         normalized_corpus.append(text)
+    return normalized_corpus
 
 
-
-if __name__ == '__main__':
-    normalize_corpus(corpus)
 
 
 
