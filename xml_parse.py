@@ -11,15 +11,19 @@ R_IDS = []
 
 def set_directory():
     # real training set
-    # os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
+    os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
     # TESTING
-    os.chdir('/Users/MasonBaran/Desktop/TESTING')
+    # os.chdir('/Users/MasonBaran/Desktop/TESTING')
 
 
 def get_files():
     for file_names in glob.iglob('*.xml'):
         yield file_names
 
+
+"""TODO brainstorm method to capture participant level utterance and also criteria for when utterance is
+is 'worth' of this processing, i.e. utterance must be greater than <some length>.
+"""
 
 # parse xml at participant level
 # def parse_xml_IP(file):

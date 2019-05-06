@@ -5,6 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import random
 from matplotlib.font_manager import FontProperties
 import pandas as pd
+from scipy.cluster.hierarchy import ward, dendrogram
 
 
 # define k_means with modifiable paramters as function args (where defaut cluster val is 5)
@@ -14,6 +15,27 @@ def k_means(feature_matrix, num_clusters=5):
     km.fit(feature_matrix)
     clusters = km.labels_
     return km, clusters
+
+
+def find_optimal_cluster_num(feature_matrix, save_figure=False, max_n = 5):
+    """
+    helper method to find optimal number of num_clusters using the 'elbow method'
+    :return: optimal number == num_clusters
+    """
+    Sum_of_squared_distances = []
+    K = range(1, max_n)
+    for k in K:
+        km = KMeans(n_clusters=k)
+        km = km.fit(feature_matrix)
+        Sum_of_squared_distances.append(km.inertia_)
+
+    plt.plot(K, Sum_of_squared_distances, 'bx-')
+    plt.xlabel('k')
+    plt.ylabel('Sum_of_squared_distances')
+    plt.title('Elbow Method For Optimal k')
+    if save_figure:
+        plt.savefig("/Users/MasonBaran/zuck_nlp/files/figures/kmeans_elbow{}.png".format(max_n))
+    plt.show()
 
 
 def get_cluster_data(clustering_obj, data,
@@ -109,4 +131,35 @@ def plot_clusters(num_clusters, feature_matrix,
         plt.savefig("/Users/MasonBaran/zuck_nlp/files/figures/numclusters{}.png".format(num_clusters))
     # show the plot
     plt.show()
+
+
+# Ward Hierarchical Clustering
+
+def ward_hierarchical_clustering(feature_matrix):
+    cosine_distance = 1 - cosine_similarity(feature_matrix)
+    linkage_matrix = ward(cosine_distance)
+    return linkage_matrix
+
+
+def plot_hierarchical_clusters(linkage_matrix, data, figure_size=(8, 12)):
+    # set size
+    fig, ax = plt.subplots(figsize=figure_size)
+    movie_titles = data['Title'].values.tolist()
+    # plot dendrogram
+    ax = dendrogram(linkage_matrix, orientation="left", labels=movie_titles)
+    plt.tick_params(axis='x',
+                    which='both',
+                    bottom='off',
+                    top='off',
+                    labelbottom='off')
+    plt.tight_layout()
+    plt.savefig('ward_hierachical_clusters.png', dpi=200)
+
+
+# build ward's linkage matrix
+linkage_matrix = ward_hierarchical_clustering(feature_matrix)
+# plot the dendrogram
+plot_hierarchical_clusters(linkage_matrix=linkage_matrix,
+                           movie_data=movie_data,
+                           figure_size=(8, 10))
 
