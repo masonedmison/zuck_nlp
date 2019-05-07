@@ -2,7 +2,6 @@ from skmultilearn.problem_transform import LabelPowerset
 from sklearn.linear_model import SGDClassifier
 from preprocess import normalize_corpus
 from xml_parse import xml_parse
-from feature_extraction import tfidf_extractor
 from sklearn.model_selection import train_test_split
 
 
@@ -17,8 +16,6 @@ Testing label powerset with various multi-class classifiers
 corpus, titles, record_ids, df = xml_parse()
 nc = normalize_corpus(corpus)
 
-# to tdidf - all features
-tfidf_vectorizer, tfidf_features = tfidf_extractor(nc)
 
 # split train and test sets where X = features and y = labels -- use sklearn
 

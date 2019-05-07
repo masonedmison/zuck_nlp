@@ -7,7 +7,7 @@ import document_clustering as dc
 if __name__ == '__main__':
     # where corpus, titles, records_ids references array whereindex is 1:1 mapping for each records
     # where each data point is needed, use df which houses all data within a pandas dataframe
-    corpus, titles, record_ids, df = xml_parse()
+    corpus, df = xml_parse()
     nc = normalize_corpus(corpus)
     vectorizer, feature_matrix = build_feature_matrix(nc,
                                                       feature_type='tfidf',

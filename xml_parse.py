@@ -9,11 +9,11 @@ TITLES = []
 R_IDS = []
 
 
-def set_directory():
+def set_directory(path):
     # real training set
-    # os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
+    os.chdir(path)
     # TESTING
-    os.chdir('/Users/MasonBaran/Desktop/dup_test_train')
+    # os.chdir('/Users/MasonBaran/Desktop/dup_test_train')
 
 
 def get_files():
@@ -54,25 +54,31 @@ def parse_xml_ff(file):
     if file.split('.')[1] != "xml":
         raise TypeError("{} is not an .xml file".format(file))
     
-    tree = ET.parse(file)
-    root = tree.getroot()
+    try:
+        tree = ET.parse(file)
+        root = tree.getroot()
 
-    # get record title
-    doc_title_find = root.findall("./metadata/title")
-    doc_title = doc_title_find[0].text
+        # get record title
+        doc_title_find = root.findall("./metadata/title")
+        doc_title = doc_title_find[0].text
 
-    # get record id
-    r_id_find = root.findall("./metadata/record_id")
-    r_id = r_id_find[0].text
+        # get record id
+        r_id_find = root.findall("./metadata/record_id")
+        r_id = r_id_find[0].text
 
-    # add corpus to df
+        # add corpus to df
 
-    contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
-    # join with space between participant utterances
-    contents_joined = " ".join(contents_whole)
-    CORPUS.append(contents_joined)
-    TITLES.append(doc_title)
-    R_IDS.append(r_id)
+        contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
+
+        # join with space between participant utterances
+        contents_joined = " ".join(contents_whole)
+        CORPUS.append(contents_joined)
+        TITLES.append(doc_title)
+        R_IDS.append(r_id)
+
+    except Exception as e:
+        print(file)
+        print(e.__repr__())
 
 
 def make_df():
@@ -86,13 +92,13 @@ def make_df():
     return df
 
 
-def xml_parse():
-    set_directory()
+def xml_parse(path):
+    set_directory(path)
     files = get_files()
     for file in files:
         parse_xml_ff(file)
     df = make_df()
-    return CORPUS, TITLES, R_IDS, df
+    return CORPUS, df
 
 
 
