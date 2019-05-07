@@ -5,6 +5,7 @@ import re
 import string
 from contractions import CONTRACTION_MAP
 import pickle
+import unicodedata
 
 # file for testing purposes
 #file = '/Users/MasonBaran/Desktop/xml_read_test/2019-006.xml'
@@ -22,6 +23,20 @@ def tokenize_text(text):
     tokens = nltk.word_tokenize(text)
     tokens = [token.strip() for token in tokens]
     return tokens
+
+
+def parse_document(document):
+    document = re.sub('\n', ' ', document)
+    if isinstance(document, str):
+        document = document
+    elif isinstance(document, bytes):
+        return unicodedata.normalize('NFKD', document).encode('ascii', 'ignore')
+    else:
+        raise ValueError('Document is not string or unicode!')
+    document = document.strip()
+    sentences = nltk.sent_tokenize(document)
+    sentences = [sentence.strip() for sentence in sentences]
+    return sentences
 
 
 def remove_characters_before_tokenization(text, keep_apostrophes = False):

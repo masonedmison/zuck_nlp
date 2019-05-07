@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     # specifically kmeans clustering of documents
     # use 20 num_clusters
-    num_clusters = 5
+    num_clusters = 20
     #dc.find_optimal_cluster_num(feature_matrix, save_figure=True, max_n=25)
     km_obj, clusters = dc.k_means(feature_matrix=feature_matrix, num_clusters=num_clusters)
 
@@ -35,8 +35,8 @@ if __name__ == '__main__':
                                        num_clusters=num_clusters, topn_features=3)
 
     # visualize clusters
-    dc.plot_clusters(num_clusters=num_clusters, feature_matrix=feature_matrix, cluster_data=cluster_data,
-                     data=df, plot_size=(16, 8), save_figure=True)
+    # dc.plot_clusters(num_clusters=num_clusters, feature_matrix=feature_matrix, cluster_data=cluster_data,
+                     # data=df, plot_size=(16, 8), save_figure=True)
 
     dc.print_cluster_data(cluster_data)
     # ################################################################

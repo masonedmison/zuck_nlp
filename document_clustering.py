@@ -58,8 +58,12 @@ def get_cluster_data(clustering_obj, data,
         documents = data[data['Cluster'] == cluster_num]['Title'].values.tolist()
         corpus = data[data['Cluster'] == cluster_num]['corpus'].values.tolist()
         cluster_details[cluster_num]['document'] = documents
+        cluster_details[cluster_num]['corpus'] = corpus
+        # append record is
+        record_id = data[data['Cluster'] == cluster_num]['record_id'].values.tolist()
+        cluster_details[cluster_num]['record_id'] = record_id
     write_to_csv(list(cluster_details.values()), file_name="kmeans{}".format(str(num_clusters)),
-                 fieldnames=['cluster_num', 'key_features', 'document'])
+                 fieldnames=['cluster_num', 'key_features', 'document', 'record_id', 'corpus'])
 
     return cluster_details
 

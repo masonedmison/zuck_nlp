@@ -1,7 +1,5 @@
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import pandas as pd
-import gensim
-import nltk
 
 
 def tfidf_extractor(corpus, ngram_range=(1,1)):

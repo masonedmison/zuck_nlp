@@ -13,7 +13,7 @@ def set_directory():
     # real training set
     # os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
     # TESTING
-    os.chdir('/Users/MasonBaran/Desktop/TESTING')
+    os.chdir('/Users/MasonBaran/Desktop/dup_test_train')
 
 
 def get_files():
