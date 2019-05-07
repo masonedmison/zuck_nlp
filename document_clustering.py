@@ -6,6 +6,8 @@ import random
 from matplotlib.font_manager import FontProperties
 import pandas as pd
 from scipy.cluster.hierarchy import ward, dendrogram
+import numpy as np
+from utils import write_to_csv
 
 
 # define k_means with modifiable paramters as function args (where defaut cluster val is 5)
@@ -54,7 +56,10 @@ def get_cluster_data(clustering_obj, data,
         cluster_details[cluster_num]['key_features'] = key_features
 
         documents = data[data['Cluster'] == cluster_num]['Title'].values.tolist()
+        corpus = data[data['Cluster'] == cluster_num]['corpus'].values.tolist()
         cluster_details[cluster_num]['document'] = documents
+    write_to_csv(list(cluster_details.values()), file_name="kmeans{}".format(str(num_clusters)),
+                 fieldnames=['cluster_num', 'key_features', 'document'])
 
     return cluster_details
 
@@ -154,12 +159,7 @@ def plot_hierarchical_clusters(linkage_matrix, data, figure_size=(8, 12)):
                     labelbottom='off')
     plt.tight_layout()
     plt.savefig('ward_hierachical_clusters.png', dpi=200)
+    plt.show()
 
 
-# build ward's linkage matrix
-linkage_matrix = ward_hierarchical_clustering(feature_matrix)
-# plot the dendrogram
-plot_hierarchical_clusters(linkage_matrix=linkage_matrix,
-                           movie_data=movie_data,
-                           figure_size=(8, 10))
 

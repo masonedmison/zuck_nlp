@@ -11,9 +11,9 @@ R_IDS = []
 
 def set_directory():
     # real training set
-    os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
+    # os.chdir('/Users/MasonBaran/Desktop/zuck_tests_to_to_cluster')
     # TESTING
-    # os.chdir('/Users/MasonBaran/Desktop/TESTING')
+    os.chdir('/Users/MasonBaran/Desktop/TESTING')
 
 
 def get_files():
@@ -65,6 +65,8 @@ def parse_xml_ff(file):
     r_id_find = root.findall("./metadata/record_id")
     r_id = r_id_find[0].text
 
+    # add corpus to df
+
     contents_whole = [child.text for child in root.iter() if child.tag == 'participant']
     # join with space between participant utterances
     contents_joined = " ".join(contents_whole)
@@ -79,7 +81,8 @@ def make_df():
     # else...
     ids = pd.Series(R_IDS)
     titles = pd.Series(TITLES)
-    df = pd.DataFrame({'record_id':ids, 'Title': titles})
+    corpus = pd.Series(CORPUS)
+    df = pd.DataFrame({'record_id':ids, 'Title': titles, 'corpus': corpus})
     return df
 
 
