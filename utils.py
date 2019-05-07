@@ -50,15 +50,9 @@ def get_metrics(true_labels, predicted_labels):
             2))
 
 
-def write_to_csv(dict, file_name, fieldnames=None):
+def write_to_csv(d, file_name, fieldnames=None):
     with open('/Users/MasonBaran/zuck_nlp/files/csv/{}.csv'.format(file_name), 'w') as outfile:
         w = csv.DictWriter(outfile, fieldnames=fieldnames)
         if fieldnames:
             w.writeheader()
-        # if nested_dicts:
-        #     for d in dict:
-        #         print(type(dict[d]))
-        #         w.writerows(dict(dict[d]))
-        # else:
-        #     w.writerows(dict)
-        w.writerows(dict)
+        w.writerows(d)

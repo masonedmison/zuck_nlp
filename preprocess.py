@@ -74,9 +74,13 @@ def expand_contractions(text, contraction_mapping):
     return expanded_text
 
 
+def get_stopwords():
+    return nltk.corpus.stopwords.words('english')
+
+
 def remove_stopwords(text):
     tokens = tokenize_text(text)
-    stopwords = nltk.corpus.stopwords.words('english')
+    stopwords = get_stopwords()
     filtered_tokens = [token for token in tokens if token not in stopwords]
     filtered_text = " ".join(filtered_tokens)
     return filtered_text
